@@ -1,4 +1,4 @@
-var path = location.hash.substr(2);
+var path = decodeURIComponent(location.hash.substr(2));
 
 var converter = new Showdown.converter();
 var content = document.getElementById('content');
@@ -6,16 +6,16 @@ var dis = document.getElementById('disqus_thread');
 var xmlhttp;
 var disqus_url;
 
-/* Chang below information into your accout */
 var disqus_shortname = 'hooloodemo';
-var hostbase = 'http://page.lizhe.org';
-var githubname = 'sneezry';
-var repos = 'Hooloo';
+var hostbase = 'http://hooloo.github.io';
+var githubname = 'hooloo';
+var repos = 'hooloo.github.io';
 
 main();
 
 function main(){
 	if(path){
+		window.history.pushState(null, '', '/#!'+path);
 		disqus_url = hostbase + path;
 		content.innerHTML = 'loading...';
 		showpost(path);
@@ -71,7 +71,7 @@ function state_Change(){
 function showpost(path){
 	//window.history.pushState(null, path.substr(1).split('/')[path.substr(1).split('/').length-1] + ' - Sneezry', path);
 	var url = location.protocol + '//' + location.hostname + '/md/' + path.substr(1).replace(/\//g, '-');
-	document.title = path.substr(1).split('/')[path.substr(1).split('/').length-1] + ' - Sneezry';
+	document.title = path.substr(1).split('/')[path.substr(1).split('/').length-1] + ' - Hooloo';
 	loadXMLDoc(url);
 }
 
