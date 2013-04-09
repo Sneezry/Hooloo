@@ -6,8 +6,9 @@ var dis = document.getElementById('disqus_thread');
 var xmlhttp;
 var disqus_url;
 
+/* Chang below information into your accout */
 var disqus_shortname = 'hooloodemo';
-var hostbase = 'http://sneezry.github.io/Hooloo';
+var hostbase = 'http://page.lizhe.org/Hooloo';
 var githubname = 'sneezry';
 var repos = 'Hooloo';
 
