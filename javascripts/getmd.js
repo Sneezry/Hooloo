@@ -8,7 +8,7 @@ var disqus_url;
 
 /* Chang below information into your accout */
 var disqus_shortname = 'hooloodemo';
-var hostbase = 'http://page.lizhe.org/Hooloo';
+var hostbase = 'http://page.lizhe.org';
 var githubname = 'sneezry';
 var repos = 'Hooloo';
 
