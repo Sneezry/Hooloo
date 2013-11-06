@@ -3,7 +3,7 @@
 Hi！很高兴见到你！如果你看见在这条消息，祝贺你成功了！一切看起来都工作正常！那么接下来的工作是什么呢？
 
 > * 首先你需要编辑CNAME文件填入你要绑定的域名
-> * 之后编辑`javascripts/getmd.js`中的相关信息为你自己的信息，你所要编辑的信息有
+> * 之后编辑`javascripts/config.js`中的相关信息为你自己的信息，你所要编辑的信息有
 >   > * disqus_shortname，这个你在设置Disqus时自己已经填写过
 >   > * hostbase，填入你自己的域名，后面别加`/`
 >   > * githubname，你在GitHub中的用户名

@@ -4,15 +4,89 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="shortcut icon" type="image/jpeg" href="/images/fav_16_16.jpg" />
+    <meta content="I write code." name="description">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/loading.css" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script src="/javascripts/config.js"></script>
     <script src="/javascripts/showdown.js"></script>
     <title>Hooloo</title>
   </head>
+
   <body>
-    <div id="content">
-      loading...
+    <header>
+      <div class="inner">
+        <a href="/" onclick = "return false"><h1 onclick="home()">Hooloo</h1></a>
+        <span class="searchbar">
+          <!--
+          <script>
+            (function() {
+              var cx = '002415249626294940706:objnr9gfpyo';
+              var gcse = document.createElement('script');
+              gcse.type = 'text/javascript';
+              gcse.async = true;
+              gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+                  '//www.google.com/cse/cse.js?cx=' + cx;
+              var s = document.getElementsByTagName('script')[0];
+              s.parentNode.insertBefore(gcse, s);
+            })();
+          </script>
+          <gcse:search></gcse:search>
+        -->
+        <input type="text" id="searchbar" onclick="cache()" onkeyup="if(this.value){doSearch(this.value)}else{home()}">
+        </span>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <div class="gotop" onclick="goToTop()">
+            <div class="gotopinner">
+              <div class="topleft"></div>
+              <div class="topright"></div>
+              <div class="topbody"></div>
+            </div>
+          </div>
+          <div id="loading">
+            <div class="loading" index="0"></div>
+            <div class="loading" index="1"></div>
+            <div class="loading" index="2"></div>
+            <div class="loading" index="3"></div>
+            <div class="loading" index="4"></div>
+          </div>
+          <a href="/" onclick="return false">
+            <div id="backhome" onclick="home()">
+              <div class="backhome">
+                <div class="backhomeinner">
+                  <div class="backleft"></div>
+                  <div class="backright"></div>
+                  <div class="backbody"></div>
+                </div>
+              </div>
+            </div>
+          </a>
+          <div id="content">
+          </div>
+          <div id="takinglonger"><blockquote>This is taking longer than normal, and there may be some problems in your network.</blockquote></div>
+          <div id="disqus_thread" style="display:none"></div>
+        </section>
+
+        <aside id="sidebar">
+          <p>This blog is based on <a href="https://github.com/sneezry/Hooloo">Hooloo</a> using the Architect theme by <a href="http://sneezry.com">Sneezry</a> based on <a href="http://twitter.com/jasonlong">Jason Long</a>.</p>
+          <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a>
+        </aside>
+      </div>
+      <footer>Stay hungry, Stay foolish.</footer>
     </div>
-    <div id="disqus_thread" style="display:none"></div>
+  <script src="/javascripts/search.js"></script>
   <script src="/javascripts/getmd.js"></script>
+  <script src="/javascripts/main.js"></script>
   </body>
 </html>
