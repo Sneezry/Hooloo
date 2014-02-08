@@ -19,7 +19,7 @@ function search(q){
 		loading.style.display = 'block';
 		dis.style.display = 'none';
 		dis.innerHTML = '';
-		document.title = 'Search:' + q + ' - Hooloo';
+		document.title = 'Search:' + q + ' - '+sitetitle;
 		kw = q;
 		if(postList){
 			searchlist(postList);
@@ -62,7 +62,7 @@ function searchLoadXMLDoc(url, pname){
 			if (xmlhttp.readyState==4){// 4 = "loaded"
 				currentTotal++;
 				loading.style.display = 'none';
-				backhome.style.display = 'block';
+				//backhome.style.display = 'block';
 				if (xmlhttp.status==200){// 200 = "OK"
 					if(xmlhttp.responseText.toLowerCase().indexOf(kw.toLowerCase()) != -1){
 						content.innerHTML += '<postlist><a href="/#!/' + pname.replace(/-/g, '/') + '">' + pname.split('-')[pname.split('-').length-1] + '</a></postlist>';
@@ -72,7 +72,7 @@ function searchLoadXMLDoc(url, pname){
 				if(currentTotal == listTotal){
 					loading.style.display = 'none';
 					if(!searchResult){
-						content.innerHTML = '<blockquote>No Results.</blockquote>';
+						content.innerHTML = '<blockquote id="no_results">No Results.</blockquote>';
 					}
 					searchResult = false;
 				}

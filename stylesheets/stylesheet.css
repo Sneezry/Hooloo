@@ -50,7 +50,7 @@ table {
 body {
   font-size: 15px;
   line-height: 1.5; 
-  background: #fafafa url(../images/body-bg.jpg) 0 0 repeat;
+  background: #eee;
   font-family: Arial, serif;
   font-weight: 400;
   color: #666;
@@ -69,6 +69,8 @@ header {
   font-family: Arial, serif; 
   background: #2e7bcf;
   border-bottom: solid 1px #275da1;
+  position: relative;
+  overflow: hidden;
 }
 
 header h1 {
@@ -93,7 +95,13 @@ postlist {
   font-size: 20px;
   display: block;
   font-family: Arial, sans-serif;
-  padding: 5px 0 10px 0;
+  padding: 10px;
+  background: url(../images/bg_item.png) bottom;
+  border-bottom: 1px #e2e2e2 solid;
+}
+
+postlist:last-child {
+  border: none;
 }
 
 postlist a {
@@ -101,7 +109,20 @@ postlist a {
 }
 
 postlist a:hover {
-  border-bottom: 1px #2879d0 dashed
+  border-bottom: 1px #2879d0 dashed;
+}
+
+.prev_page, .next_page {
+  color: gray;
+  font-size: 12px;
+}
+
+.prev_page {
+  float: left;
+}
+
+.next_page {
+  float: right;
 }
 
 .inner {
@@ -115,18 +136,39 @@ postlist a:hover {
   padding-top: 30px;
 }
 
+#disqus_thread {
+  padding: 20px;
+}
+
 #main-content {
   width: 690px;
+  min-height: 50px;
   float: left;
   position: relative;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 1px 2px 3px #ddd;
+  box-shadow: 1px 2px 3px #ddd;
+  background: white;
 }
 
 #main-content img {
   max-width: 100%;
 }
 
+#loading {
+  padding-top: 20px;
+}
+
+#no_results {
+  margin-top: 30px;
+  padding-left: 20px;
+}
+
 #takinglonger {
   margin-top: 30px;
+  padding-left: 20px;
   display: none;
 }
 
@@ -139,14 +181,17 @@ postlist a:hover {
 
 aside#sidebar {
   width: 200px;
-  padding-left: 20px;
-  min-height: 550px;
+  padding: 20px;
   float: right;
   position: relative;
-  background: transparent url(../images/sidebar-bg.png) 0 0 no-repeat;
-  z-index: 10;
+  background: white;
   font-size: 12px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
   line-height: 1.3;
+  -webkit-box-shadow: 1px 2px 3px #ddd;
+  box-shadow: 1px 2px 3px #ddd;
 }
 
 aside#sidebar p.repo-owner,
@@ -298,15 +343,23 @@ form {
   margin-left: 815px;
   height: 60px;
   width: 60px;
-  border: black 10px solid;
+  border: #888 10px solid;
   -webkit-border-radius: 40px;
   -moz-border-radius: 40px;
   border-radius: 40px;
-  opacity: 0.5;
+  background: white;
+  z-index: 10;
+  box-shadow: 0 0 10px #888;
+  display: none;
 }
 
 .gotop:hover {
-  opacity: 0.75;
+  border: #444 10px solid;
+  box-shadow: 0 0 10px #444;
+}
+
+.gotop:hover .gotopinner div {
+  background: #444;
 }
 
 .gotopinner {
@@ -326,7 +379,7 @@ form {
   position: absolute;
   left: 0;
   top: 10px;
-  background: black;
+  background: #888;
 }
 
 .topright {
@@ -339,7 +392,7 @@ form {
   position: absolute;
   left: 20px;
   top: 10px;
-  background: black;
+  background: #888;
 }
 
 .topbody {
@@ -348,7 +401,7 @@ form {
   position: absolute;
   left: 15px;
   top: 10px;
-  background: black;
+  background: #888;
 }
 
 #backhome {
@@ -357,6 +410,32 @@ form {
   margin-bottom: 10px;
   overflow: hidden;
   display: none;
+}
+
+#back_home {
+  color: #888;
+}
+
+#back_home a {
+  color: #888;
+}
+
+#post_title {
+  font-size: 2em;
+  border-bottom: 1px #e2e2e2 solid;
+  margin: 10px 0;
+  padding: 5px 0;
+}
+
+#shorturl {
+  font-size: 0.4em;
+  height: 1.2em;
+  line-height: 1.2em;
+  text-align: right;
+}
+
+#shorturl span {
+  color: #2e7bcf;
 }
 
 .backhome {
@@ -525,6 +604,10 @@ ul li {
   padding-left: 20px;
 }
 
+#recent_comments ul li {
+  padding: 0;
+}
+
 ol li {
   list-style: decimal inside;
   padding-left: 3px;
@@ -536,7 +619,7 @@ dl dd {
 }
 
 footer {
-  background: transparent url('../images/hr.png') 0 0 repeat-x;
+  border-top: 1px #e2e2e2 solid;
   margin: 40px 10px 0 10px;
   padding-top: 20px;
   padding-bottom: 30px;
@@ -566,14 +649,15 @@ footer a:hover {
 .clearfix {display: block;}
 
 .disqus_count {
-  margin: 2px 20px;
+  margin: -10px 20px;
   height: 16px;
   line-height: 16px;
   display: inline-block;
+  float: right;
 }
 
 .disqus_count a {
-  display: inline-block;
+  display: block;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
@@ -581,7 +665,7 @@ footer a:hover {
   line-height: 16px;
   font-size: 12px;
   min-width: 10px;
-  padding: 0 3px;
+  padding: 0 5px;
   text-align: center;
   color: white;
   background: gray;
@@ -605,6 +689,16 @@ footer a:hover {
   color: gray;
   font-style: italic;
   display: inline-block;
+}
+
+#recent_comments h2 {
+  font-size: 1.5em;
+  margin: 20px 0 0 10px;
+}
+
+#gameoflife {
+  position: absolute;
+  top: 0;
 }
 
 /* #Media Queries
