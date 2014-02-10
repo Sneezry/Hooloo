@@ -9,3 +9,5 @@
 * Edit `index.html` title to yours (L21 & L29)
 
 * Edit CNAME if you have a custom domain
+
+Live DEMO: <http://hooloo.github.io>
