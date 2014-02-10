@@ -154,7 +154,7 @@ function showlist(list){
 	document.getElementById('takinglonger').style.display = 'none';
 	postList = list;
 	var txt = '';
-	if(page*20>list.data.length){
+	if(page*20>list.data.length && page>1){
 		page = Math.ceil(list.data.length/20);
 		window.history.replaceState(null, '', '/#!/page/'+page);
 	}
