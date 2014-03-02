@@ -2,10 +2,11 @@ var listTotal;
 var currentTotal = 0;
 var searchResult = false;
 var isCache = false;
+var isroot=((repos.indexOf('github.com')==-1 && repos.indexOf('github.io')==-1)?false:true);
 
 function doSearch(q){
 	if(q){
-		window.history.pushState(null, '', '/#!/search/'+q);
+		window.history.pushState(null, '', (isroot?'':('/'+repos))+'/#!/search/'+q);
 		search(q);
 	}
 }
@@ -26,7 +27,7 @@ function search(q){
 		}
 		else{
 			var el = document.createElement('script');
-			el.src = 'https://api.github.com/repos/' + githubname + '/' + repos + '/contents/md?callback=searchlist';
+			el.src = 'https://api.github.com/repos/' + githubname + '/' + repos + '/contents/md?callback=searchlist'+(branch?('&ref='+branch):'');
 			document.getElementsByTagName('head')[0].appendChild(el);
 		}
 	}
@@ -37,13 +38,16 @@ function searchlist(list){
 	listTotal = list.data.length;
 	currentTotal = 0;
 	for(var i = list.data.length; i > 0; i--){
+		if(suffix && list.data[i-1].name.substr(-suffix.length)==suffix){
+			list.data[i-1].name = list.data[i-1].name.substr(0, list.data[i-1].name.length-suffix.length);
+		}
 		if(list.data[i-1].name.toLowerCase().indexOf(kw.toLowerCase()) != -1){
-			content.innerHTML += '<postlist><a href="/#!/' + list.data[i-1].name.replace(/-/g, '/') + '">' + list.data[i-1].name.split('-')[list.data[i-1].name.split('-').length-1] + '</a></postlist>';
+			content.innerHTML += '<postlist><a href="'+(isroot?'':('/'+repos))+'/#!/' + list.data[i-1].name.replace(/-/g, '/') + '">' + list.data[i-1].name.split('-')[list.data[i-1].name.split('-').length-1] + '</a></postlist>';
 			searchResult = true;
 			currentTotal++;
 		}
 		else{
-			var url = location.protocol + '//' + location.hostname + '/md/' + list.data[i-1].name;
+			var url = location.protocol + '//' + location.hostname + (isroot?'':('/'+repos))+'/md/' + list.data[i-1].name+(suffix?suffix:'');
 			searchLoadXMLDoc(url, list.data[i-1].name);
 		}
 	}
@@ -65,7 +69,7 @@ function searchLoadXMLDoc(url, pname){
 				//backhome.style.display = 'block';
 				if (xmlhttp.status==200){// 200 = "OK"
 					if(xmlhttp.responseText.toLowerCase().indexOf(kw.toLowerCase()) != -1){
-						content.innerHTML += '<postlist><a href="/#!/' + pname.replace(/-/g, '/') + '">' + pname.split('-')[pname.split('-').length-1] + '</a></postlist>';
+						content.innerHTML += '<postlist><a href="'+(isroot?'':('/'+repos))+'/#!/' + pname.replace(/-/g, '/') + '">' + pname.split('-')[pname.split('-').length-1] + '</a></postlist>';
 						searchResult = true;
 					}
 				}
@@ -91,7 +95,7 @@ function cache(){
 		}
 		else{
 			var el = document.createElement('script');
-			el.src = 'https://api.github.com/repos/' + githubname + '/' + repos + '/contents/md?callback=docache';
+			el.src = 'https://api.github.com/repos/' + githubname + '/' + repos + '/contents/md?callback=docache'+(branch?('&ref='+branch):'');
 			document.getElementsByTagName('head')[0].appendChild(el);
 		}
 	}
@@ -100,7 +104,7 @@ function cache(){
 function docache(list){
 	postList = list;
 	for(var i = list.data.length; i > 0; i--){
-		var url = location.protocol + '//' + location.hostname + '/md/' + list.data[i-1].name;
+		var url = location.protocol + '//' + location.hostname + (isroot?'':('/'+repos))+'/md/' + list.data[i-1].name;
 		var xmlhttp=null;
 		if (window.XMLHttpRequest){// code for IE7, Firefox, Opera, etc.
 			xmlhttp=new XMLHttpRequest();
