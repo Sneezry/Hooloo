@@ -131,6 +131,10 @@ postlist a:hover {
   margin: 0 auto;
 }
 
+#content_inner {
+  padding: 20px 20px 20px 40px;
+}
+
 #content-wrapper {
   border-top: solid 1px #fff;
   padding-top: 30px;
@@ -810,6 +814,9 @@ footer a:hover {
     content: none;
     padding-right: 0;
     margin-left: 0;
+  }
+  #content_inner {
+    padding: 20px;
   }
 }
 
