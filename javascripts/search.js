@@ -42,7 +42,7 @@ function searchlist(list){
 			list.data[i-1].name = list.data[i-1].name.substr(0, list.data[i-1].name.length-suffix.length);
 		}
 		if(list.data[i-1].name.toLowerCase().indexOf(kw.toLowerCase()) != -1){
-			content.innerHTML += '<postlist><a href="'+(isroot?'':('/'+repos))+'/#!/' + list.data[i-1].name.replace(/-/g, '/') + '">' + list.data[i-1].name.split('-')[list.data[i-1].name.split('-').length-1] + '</a></postlist>';
+			content.innerHTML += '<postlist><a href="'+(isroot?'':('/'+repos))+'/#!/' + encodePath(list.data[i-1].name) + '">' + getPostName(list.data[i-1].name) + '</a></postlist>';
 			searchResult = true;
 			currentTotal++;
 		}
@@ -117,4 +117,30 @@ function docache(list){
 			xmlhttp.send(null);
 		}
 	}
+}
+
+function getPostName(name){
+	name = name.split('-');
+	var newName = name[3];
+	for(var i=4; i<name.length; i++){
+		newName += '-'+name[i];
+	}
+	return newName.replace(/_/g, ' ');
+}
+
+function encodePath(path){
+	path = encodeURIComponent(path);
+	path = path.split('-');
+	var newPath = path[0]+'/'+path[1]+'/'+path[2]+'/'+path[3];
+	for(var i=4; i<path.length; i++){
+		newPath += '-'+path[i];
+	}
+	path = newPath;
+	for(var i=0; i<path.length; i++){
+		if(path.substr(i,1) == '%'){
+			path = path.substr(0,i+1)+path.substr(i+1,2).toLowerCase()+path.substr(i+3);
+			i+=2;
+		}
+	}
+	return path;
 }

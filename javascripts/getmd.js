@@ -105,8 +105,9 @@ function loadXMLDoc(url){
 						blog_text = Base64.decode(blog_text.substr(2));
 						encoded = true;
 					};
+					blog_text = filterJekyllHeader(blog_text);
 					var converter = new Showdown.converter();
-					content.innerHTML = '<div id="content_inner"><div id="back_home"><a href="/" onclick="home();return false;">'+sitetitle+'</a><span>&nbsp;›&nbsp;</span></div><div id="post_title">' + decodeUtf8(path.substr(1).split('/')[path.substr(1).split('/').length-1].replace(/_/g, ' ')) + (encoded?Base64.decode('PHN1cCBzdHlsZT0iZm9udC1zaXplOjAuNWVtO3ZlcnRpY2FsLWFsaWduOiBzdXBlcjsiIHRpdGxlPSLmraTmlofnq6Dlt7Looqvph43mlrDnvJbnoIHku6XourLpgb/lrqHmn6UiPuKYmuiiq+e8lueggeeahOWGheWuuTwvc3VwPg=='):'') + '</div>' + converter.makeHtml(blog_text) + '<div class="date">Posted at ' + pdate + '</div></div>';
+					content.innerHTML = '<div id="content_inner"><div id="back_home"><a href="/" onclick="home();return false;">'+sitetitle+'</a><span>&nbsp;›&nbsp;</span></div><div id="post_title">' + decodeUtf8(getPostName(path)) + (encoded?Base64.decode('PHN1cCBzdHlsZT0iZm9udC1zaXplOjAuNWVtO3ZlcnRpY2FsLWFsaWduOiBzdXBlcjsiIHRpdGxlPSLmraTmlofnq6Dlt7Looqvph43mlrDnvJbnoIHku6XourLpgb/lrqHmn6UiPuKYmuiiq+e8lueggeeahOWGheWuuTwvc3VwPg=='):'') + '</div>' + converter.makeHtml(blog_text) + '<div class="date">Posted at ' + pdate + '</div></div>';
 					if(dis){
 						dis.style.display = 'block';
 					}
@@ -136,7 +137,7 @@ function chktakinglonger(){
 
 function showpost(path){
 	var url = location.protocol + '//' + location.hostname + (isroot?'':('/'+repos))+'/md/' + path.substr(1).replace(/\//g, '-')+(suffix?suffix:'');
-	document.title = decodeUtf8(path.substr(1).split('/')[path.substr(1).split('/').length-1].replace(/_/g, ' ')) + ' - '+sitetitle;
+	document.title = decodeUtf8(getPostName(path)) + ' - '+sitetitle;
 	pdate = path.substr(1).split('/')[0]+'-'+path.substr(1).split('/')[1]+'-'+path.substr(1).split('/')[2];
 	loadXMLDoc(url);
 }
@@ -163,7 +164,7 @@ function showlist(list){
 		if(suffix && list.data[i-1].name.substr(-suffix.length)==suffix){
 			list.data[i-1].name = list.data[i-1].name.substr(0, list.data[i-1].name.length-suffix.length);
 		}
-		txt += '<postlist><a href="'+(isroot?'':('/'+repos))+'/#!/' + list.data[i-1].name.replace(/-/g, '/') + '">' + list.data[i-1].name.split('-')[list.data[i-1].name.split('-').length-1].replace(/_/g, ' ') + '</a><div class="post_info"><span class="post_date">Posted at '+list.data[i-1].name.split('-')[0]+'-'+list.data[i-1].name.split('-')[1]+'-'+list.data[i-1].name.split('-')[2]+'</span><span class="disqus_count"><a href="' + hostbase + '/' + encodePath(list.data[i-1].name) + (commentscount[i]?'':'#disqus_thread') + '" name="commentscount" id="post-'+i+'">'+(commentscount[i]?commentscount[i]:'')+'</a></span></div></postlist>';
+		txt += '<postlist><a href="'+(isroot?'':('/'+repos))+'/#!/' + encodePath(list.data[i-1].name, true) + '">' + getPostName(list.data[i-1].name) + '</a><div class="post_info"><span class="post_date">Posted at '+list.data[i-1].name.split('-')[0]+'-'+list.data[i-1].name.split('-')[1]+'-'+list.data[i-1].name.split('-')[2]+'</span><span class="disqus_count"><a href="' + hostbase + '/' + encodePath(list.data[i-1].name, false) + (commentscount[i]?'':'#disqus_thread') + '" name="commentscount" id="post-'+i+'">'+(commentscount[i]?commentscount[i]:'')+'</a></span></div></postlist>';
 	}
 	if(page==1 && page*20<list.data.length){
 		txt += '<postlist><a class="prev_page" href="'+(isroot?'':('/'+repos))+'/#!/page/'+(page+1)+'">←较早的文章</a><div style="clear:both"></div></postlist>';
@@ -184,15 +185,21 @@ function showlist(list){
     }());
 }
 
-function encodePath(path){
-  path = encodeURIComponent(path).replace(/-/g, '/');
-  for(var i=0; i<path.length; i++){
-    if(path.substr(i,1) == '%'){
-      path = path.substr(0,i+1)+path.substr(i+1,2).toLowerCase()+path.substr(i+3);
-      i+=2;
-    }
-  }
-  return path;
+function encodePath(path, isdecode){
+	path = encodeURIComponent(path);
+	path = path.split('-');
+	var newPath = path[0]+'/'+path[1]+'/'+path[2]+'/'+path[3];
+	for(var i=4; i<path.length; i++){
+		newPath += '-'+path[i];
+	}
+	path = newPath;
+	for(var i=0; i<path.length; i++){
+		if(path.substr(i,1) == '%'){
+			path = path.substr(0,i+1)+path.substr(i+1,2).toLowerCase()+path.substr(i+3);
+			i+=2;
+		}
+	}
+	return isdecode?decodeUtf8(path):path;
 }
 
 function decodeUtf8(str){
@@ -208,6 +215,23 @@ function decodeUtf8(str){
 	catch(e){
 		return str;
 	}
+}
+
+function getPostName(name){
+	if(name.substr(0,1)=='/'){
+		name = name.substr(1);
+	}
+	name = name.replace(/\//g, '-');
+	name = name.split('-');
+	var newName = name[3];
+	for(var i=4; i<name.length; i++){
+		newName += '-'+name[i];
+	}
+	return newName.replace(/_/g, ' ');
+}
+
+function filterJekyllHeader(post){
+	return post.replace(/^\-\-\-[\s\S]+\-\-\-[\n\r]+/g, '');
 }
 
 window.onhashchange = function(){
